@@ -8,7 +8,15 @@ import { IoClose } from 'react-icons/io5';
 import jwtDecode from 'jwt-decode';
 import url_base from "../config/variables"
 
-export const User = (props: any) => {
+interface Props{
+  change:(e:boolean)=>void;
+  id: number;
+  user: string;
+  password: string;
+}
+
+
+export const User:React.FC<Props> = (props) => {
 
   const { store, dispatch } = useContext(StoreContext);
   const { user, actualHost, cameras, token } = store;

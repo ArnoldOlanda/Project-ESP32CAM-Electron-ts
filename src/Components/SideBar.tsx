@@ -16,8 +16,17 @@ import { Camera, AddCamera, LoadingScreen, User, AddUser } from './';
 import '../styles.scss';
 import menu from '../images/menu2.svg'
 import close from '../images/Recurso 1.svg'
+import { Camera as ICamera, UsersArr } from '@/interfaces';
 
-export const SideBar = (props: any) => {
+interface Props{
+    name: string;
+    cameras: ICamera[];
+    users: UsersArr[];    
+    onClickCamera: () => void;
+}
+
+
+export const SideBar:React.FC<Props> = (props) => {
     const navigate = useNavigate();
 
     const { store, dispatch } = useContext(StoreContext);
@@ -46,34 +55,57 @@ export const SideBar = (props: any) => {
         setisModalSelectedUse(!isModalSelectedUse)
     }
 
-    const changeLoading = (e: any) => {
+    const changeLoading = (e: boolean) => {
         setLoading(e)
     }
 
     const BuildCameras = useCallback(() => {
         if (props.cameras.length > 0)
-            return props.cameras.map((e: any, i: number) => (
-                <Menu key={i}>
-                    <Camera
-                        change={changeLoading}
-                        id={e.id}
-                        name={e.name}
-                        ip={e.ip}
-                        onClickCamera={props.onClickCamera}
-                        refreshStatus={refreshStatus}
-                    />
-                </Menu>))
+            return (
+                <>
+                    {
+                        props.cameras.map(({ id, ip, name }:ICamera, i: number) => (
+                            <Menu key={i}>
+                                <Camera
+                                    change={changeLoading}
+                                    id={ id }
+                                    name={ name }
+                                    ip={ ip }
+                                    onClickCamera={props.onClickCamera}
+                                    refreshStatus={refreshStatus}
+                                />
+                            </Menu>))
+                    }
+                </>
+            )
         else
-            return (<p style={{ marginLeft: '20px', marginTop: '20px', marginBottom: '20px' }}> Aun no tienes ninguna camara </p>)
+            return (
+                <p style={{ 
+                    marginLeft: '20px', 
+                    marginTop: '20px', 
+                    marginBottom: '20px' }}
+                > 
+                   Aun no tienes ninguna camara 
+                </p>)
     }, [props.cameras, refreshStatus])
 
     const BuildUsers = () => {
         if (props.users.length > 0) {
-            return props.users.map((e: any, i: number) => (
-                <Menu key={i}>
-                    <User change={changeLoading} id={e.id} user={e.user} password={e.password} />
-                </Menu>
-            ))
+            return (
+                <>
+                {
+                    props.users.map((e: any, i: number) => (
+                        <Menu key={i}>
+                            <User 
+                            change={changeLoading} 
+                            id={e.id} 
+                            user={e.user} 
+                            password={e.password} />
+                        </Menu>
+                    ))
+                }
+                </>
+            )
         } else return (<p style={{ marginLeft: '20px', marginTop: '20px', marginBottom: '20px' }}> Aun no tienes usuarios registrados </p>)
     }
 
@@ -279,7 +311,12 @@ export const SideBar = (props: any) => {
 
 
                             <div hidden={!isModalSelectedCam}>
-                                <AddCamera change={changeCam} error={error} nameRef={nameRef} ipRef={ipRef} ></AddCamera>
+                                <AddCamera 
+                                change={changeCam} 
+                                error={error} 
+                                nameRef={nameRef} 
+                                ipRef={ipRef} />
+
                                 <BoxButtonAdd onClick={addCamera}>
                                     <ButtonAdd>
                                         Aceptar
@@ -291,7 +328,7 @@ export const SideBar = (props: any) => {
                         </SubMenu>
                         {type ?
                             <SubMenu title="Usuarios" icon={<IoPersonOutline size="1.8em" />} >
-                                <BuildUsers></BuildUsers>
+                                <BuildUsers />
 
                                 <div hidden={isModalSelectedUse}>
                                     <BoxButtonAdd onClick={() => { setisModalSelectedUse(!isModalSelectedUse) }}>

@@ -11,6 +11,7 @@ import { types } from '../context/StoreReducer'
 
 import { LoadingScreen } from '../Components'
 import { useForm } from '../hooks/useForm'
+import { ResponseLogin } from '@/interfaces'
 
 interface Iform{
   user: string;
@@ -18,7 +19,7 @@ interface Iform{
   msg: string;
 }
 
-export const Login = () => {
+export const Login:React.FC = () => {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const { store, dispatch } = useContext(StoreContext);
@@ -39,11 +40,10 @@ export const Login = () => {
     }
     
     try {
-      const body = JSON.stringify({
-        user,
-        password
-      })
+      const body = JSON.stringify({ user, password });
+
       setLoading(true)
+
       const response = await fetch(`${url_base}/api/auth/login`,{
         method:'POST',
         body,
@@ -57,16 +57,19 @@ export const Login = () => {
         setLoading(false)
         alert("Error: Server not found")
         
-      }
-      else if (response.status == 400){
-        setLoading(false)
-        const data = await response.json()
-        onSetNewState('msg',`*${ data.msg }`)
+      } else if (response.status == 400){
+
+        setLoading(false);
+
+        const data: ResponseLogin = await response.json();
+
+        onSetNewState('msg',`*${ data.msg }`);
+
         return
 
-      } else{
+      } else {
         setLoading(false)
-        const data = await response.json(); 
+        const data: ResponseLogin = await response.json(); 
         const { user, cameras, token, users} = data;
         dispatch({
           type: types.Login,

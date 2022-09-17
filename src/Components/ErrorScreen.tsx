@@ -2,7 +2,12 @@ import React from 'react'
 
 import styled from 'styled-components'
 import { IoMdRefresh } from  "react-icons/io";
-export const ErrorScreen = (props: any) => {
+
+interface Props{
+  onClick: () => void;
+}
+
+export const ErrorScreen:React.FC<Props> = (props) => {
   return (
     <Box {...props}>
         <Loading size="6em" color='black'/>

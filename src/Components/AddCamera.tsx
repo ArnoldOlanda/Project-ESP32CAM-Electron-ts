@@ -3,20 +3,20 @@ import React from 'react'
 import styled from 'styled-components'
 import { IoTrashOutline } from "react-icons/io5";
 
-interface props{
+interface Props{
   error: string;
-  change: any;
-  nameRef: any;
-  ipRef: any;
+  change: () => void;
+  nameRef: React.RefObject<HTMLInputElement>;
+  ipRef: React.RefObject<HTMLInputElement>;
 }
 
-export const AddCamera = ({ error, change, nameRef, ipRef }: props) => {
+export const AddCamera = ({ error, change, nameRef, ipRef }: Props) => {
   return (
     <Container>
       <Box >
           <BoxInput>
-              <Input ref={ nameRef } placeholder='Nombre de la camara'></Input>
-              <Input ref={ ipRef } placeholder='IP de la camara (x.x.x.x)'></Input>
+              <Input ref={ nameRef } placeholder='Nombre de la camara' />
+              <Input ref={ ipRef } placeholder='IP de la camara (x.x.x.x)' />
           </BoxInput>
           <Close onClick={ change }>
             <IoTrashOutline size="1.5em"/>

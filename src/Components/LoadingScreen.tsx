@@ -2,7 +2,7 @@ import React from 'react'
 import ReactLoading from 'react-loading';
 import styled from 'styled-components'
 
-export const LoadingScreen = () => {
+export const LoadingScreen: React.FC = () => {
   return (
     <Box>
         <Loading type="spin" color='black' />

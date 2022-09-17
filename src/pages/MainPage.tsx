@@ -9,16 +9,18 @@ import { SideBar } from '../Components/SideBar';
 import { StoreContext } from '../context/StoreProvider';
 
 
-export const MainPage = () => {
+export const MainPage: React.FC = () => {
+
   const navigate = useNavigate();
-  const {store, dispatch} = useContext(StoreContext);
+
+  const { store, dispatch} = useContext(StoreContext);
   const { user, actualHost, cameras, token, users, type } = store;
+  const [cameraIsSelected, setCameraIsSelected] = useState(false);
 
   const streamButtonRef = useRef<HTMLDivElement>(null);
   const enrollButtonRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<HTMLImageElement>(null);
 
-  const [cameraIsSelected, setCameraIsSelected] = useState(false);
 
   const onClickCamera = () => {
     setCameraIsSelected(true);
@@ -81,7 +83,11 @@ export const MainPage = () => {
 
   return (
     <Box>
-      <SideBar name={user} cameras={cameras} users={users} onClickCamera={onClickCamera} />
+      <SideBar 
+      name={ user} 
+      cameras={ cameras } 
+      users={ users } 
+      onClickCamera={ onClickCamera } />
       {
         cameraIsSelected ?
         (<>
@@ -89,7 +95,14 @@ export const MainPage = () => {
             <img height="100%" width="100%" ref={viewRef} src="" />
             <Buttons>
               <Button>Captura</Button>
-              <Button ref={enrollButtonRef} onClick={() => updateConfig(enrollButtonRef.current)}>Guardar Rostro</Button>
+
+              <Button 
+              ref={ enrollButtonRef } 
+              onClick={() => updateConfig( enrollButtonRef.current )}
+              >
+                Guardar Rostro
+              </Button>
+
               <Button ref={streamButtonRef} onClick={() => {
                 if(streamButtonRef.current){
                   const streamEnabled = streamButtonRef.current.innerHTML === 'Parar'
@@ -106,8 +119,8 @@ export const MainPage = () => {
           {
             type &&
             <ConfigurationBar
-              host={actualHost}
-              enrollButtonRef={enrollButtonRef} 
+              host = { actualHost }
+              enrollButtonRef = { enrollButtonRef } 
             /> 
           }
         </>)
