@@ -13,7 +13,12 @@ import close from '../images/Recurso 1.svg'
 
 import '../index.css'
 
-export const ConfigurationBar = (props:any) => {
+interface Props{
+  host: string | undefined;
+  enrollButtonRef: React.RefObject<HTMLDivElement>;
+}
+
+export const ConfigurationBar:React.FC<Props> = ( props ) => {
  
   // let enrollButton
   let agc : any;
@@ -150,8 +155,10 @@ export const ConfigurationBar = (props:any) => {
         })
       
       // enrollButton = document.getElementById('face_enroll')
-      props.enrollButtonRef.current.onclick = () => {
-        updateConfig(props.enrollButtonRef.current)
+      if(props.enrollButtonRef.current){
+        props.enrollButtonRef.current.onclick = () => {
+          updateConfig(props.enrollButtonRef.current)
+        }
       }
     
       // Attach default on change action
@@ -239,7 +246,7 @@ export const ConfigurationBar = (props:any) => {
       switch (isLoading){
         case 0: return(<></>)
         case 1: return (<LoadingScreen/>)
-        case 2: return (<ErrorScreen onClick={()=>{setRefresh(!refresh)}}></ErrorScreen>)
+        case 2: return (<ErrorScreen onClick={()=>{setRefresh(!refresh)}} />)
         default: return(<></>)
       }  
     }

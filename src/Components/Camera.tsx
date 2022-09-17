@@ -1,39 +1,40 @@
 import React, { useContext, useState, useEffect, useRef, memo } from 'react'
 import styled from 'styled-components'
-import { initialState, StoreContext } from '../context/StoreProvider';
-import { types } from '../context/StoreReducer';
-import ButtonOnOff from './ButtonOnOff'
 import { FiEdit2 } from "react-icons/fi";
-import { IoTrashOutline } from "react-icons/io5";
-import { IoClose } from 'react-icons/io5';
+import { IoTrashOutline, IoClose } from "react-icons/io5";
+
+import { initialState } from '@/interfaces';
+import { StoreContext } from '../context/StoreProvider';
+import { types } from '../context/StoreReducer';
+import { ButtonOnOff } from './ButtonOnOff'
 import jwtDecode from 'jwt-decode';
 import url_base from "../config/variables"
 import { isValidIP } from '../helpers';
 
 
-interface props {
-  id: string;
+interface Props {
+  id: number;
   ip: string;
   name: string;
-  change: any;
+  change: (e:boolean) => void;
   onClickCamera: () => void;
   refreshStatus: boolean;
 }
 
-export const Camera = memo(({ id, ip, name, change, onClickCamera, refreshStatus }: props) => {
+export const Camera = memo(({ id, ip, name, change, onClickCamera, refreshStatus }: Props) => {
 
   const { store, dispatch } = useContext(StoreContext); //Context
 
   const { user, actualHost, cameras, token, type } = store as initialState; //Store reducer
 
-  const [edit, setEdit] = useState(false);
-  const [error, setError] = useState("");
-  const [statusColor, setStatusColor] = useState("#161616");
+  const [edit, setEdit] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [statusColor, setStatusColor] = useState<string>("#161616");
 
   const nameRef = useRef<HTMLInputElement>(null);
   const ipRef = useRef<HTMLInputElement>(null);
 
-  const onSelected = () => {
+  const onSelected = (): void => {
     if (actualHost !== ip) {
       dispatch({
         type: types.ChangeActualHost,
@@ -210,7 +211,7 @@ export const Camera = memo(({ id, ip, name, change, onClickCamera, refreshStatus
                     </Box2>
                   </>
                   : <></>}
-              <ButtonOnOff host={ip} statusColor={statusColor} />
+              <ButtonOnOff statusColor={statusColor} />
             </div>
         }
 
@@ -231,14 +232,14 @@ export const Camera = memo(({ id, ip, name, change, onClickCamera, refreshStatus
     </Container>
   )
 })
-interface containerProps{
+interface StyledDivProps{
   isSelected: boolean;
 }
 
-const Container = styled.div<containerProps>`
+const Container = styled.div<StyledDivProps>`
     height: 100%;
     margin: 0px 10px;
-    background-color: ${props => props.isSelected ? "#4b4b4b" : ""};
+    background-color: ${({ isSelected }) => isSelected ? "#4b4b4b" : ""};
     justify-content: space-between;
     border-radius:10px;
     align-items: center;

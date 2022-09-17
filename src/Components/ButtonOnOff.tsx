@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-interface props{
-  host:string;
+interface Props{
   statusColor:string;
 }
 
-const ButtonOnOff = ({ host, statusColor }:props) => {
+export const ButtonOnOff = ({ statusColor }:Props) => {
   
 
   return (
@@ -38,4 +37,3 @@ const ButtonOnOff = ({ host, statusColor }:props) => {
   </svg>)
 }
 
-export default ButtonOnOff

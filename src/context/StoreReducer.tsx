@@ -1,3 +1,4 @@
+import { initialState, UsersArr } from "@/interfaces";
 
 type TinitialValue = string | object[] | boolean
 
@@ -42,16 +43,16 @@ const types ={
 }
 
 
-interface initialState{
-    user?: string;
-    actualHost?: string;
-    cameras: object[];
-    token?: string;
-    users?: object[];
-    type?: boolean;
-}
+// interface initialState{
+//     user?: string;
+//     actualHost: string;
+//     cameras: object[];
+//     token?: string;
+//     users?: UsersArr[];
+//     type?: boolean;
+// }
 
-const storeReducer = (state: initialState, action: any ):initialState =>{
+const storeReducer = (state: initialState, action: any ) =>{
     
     switch(action.type){
         case types.Register:

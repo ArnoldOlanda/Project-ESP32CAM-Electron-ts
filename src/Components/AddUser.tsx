@@ -3,31 +3,29 @@ import styled from 'styled-components'
 
 import { IoTrashOutline } from "react-icons/io5";
 
-interface props{
-  userRef: React.MutableRefObject<HTMLInputElement | null>;
-  passRef: React.MutableRefObject<HTMLInputElement | null>;
-  pass2Ref:React.MutableRefObject<HTMLInputElement | null>;
-  change: any;
+interface Props{
+  userRef: React.RefObject<HTMLInputElement>;
+  passRef: React.RefObject<HTMLInputElement>;
+  pass2Ref:React.RefObject<HTMLInputElement>;
+  change: () => void;
   error: string;
 }
 
-export const AddUser = (props:props) => {
+export const AddUser = ({userRef, passRef, pass2Ref, change, error}:Props) => {
   return (
     <Container>
       <Box >
           <BoxInput>
-              <Input ref={props.userRef} placeholder='Usuario'></Input>
-              <Input type="password" ref={props.passRef} placeholder='Ingrese contraseña'></Input>
-              <Input type="password" ref={props.pass2Ref} placeholder='Repita contraseña'></Input>
+              <Input ref={ userRef } placeholder='Usuario' />
+              <Input type="password" ref={ passRef } placeholder='Ingrese contraseña' />
+              <Input type="password" ref={ pass2Ref } placeholder='Repita contraseña' />
           </BoxInput>
-          <Close onClick={props.change}>
+          <Close onClick={change}>
             <IoTrashOutline size="1.5em"/>
           </Close>
           
       </Box>
-      <Error>
-        {props.error}
-      </Error>
+      <Error> { error } </Error>
     </Container> 
   )
 }
@@ -44,7 +42,6 @@ const Container = styled.div`
         background-color: #4b4b4b;
     }
 `
-
 const Box = styled.div`
     height: 100%;
     width : 100%;
@@ -56,7 +53,6 @@ const BoxInput= styled.div`
   margin-top: auto;
   margin-bottom: auto;
 `
-
 const Input = styled.input`
   height: 10px;
   display: flex;
