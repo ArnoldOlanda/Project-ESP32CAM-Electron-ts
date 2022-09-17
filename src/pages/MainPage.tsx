@@ -33,6 +33,7 @@ export const MainPage = () => {
       alert("Debe iniciar sesión")
       navigate('/');
     }
+    if(actualHost!='') setCameraIsSelected(true);
 
   }, []);
 

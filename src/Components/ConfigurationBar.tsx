@@ -85,6 +85,7 @@ export const ConfigurationBar = (props:any) => {
   
     const updateConfig = ( element: any ) => {
       let value
+      console.log(element)
       switch (element.type) {
         case 'checkbox':
           value = element.checked ? 1 : 0
@@ -108,8 +109,11 @@ export const ConfigurationBar = (props:any) => {
           console.log(`request to ${query} finished, status: ${response.status}`)
         })
     }
+
+ 
+    
+
     useEffect(() => {
-      setLoading(1)
       agc = document.getElementById('agc')
       agcGain = document.getElementById('agc_gain-group')
       gainCeiling = document.getElementById('gainceiling-group')
@@ -120,7 +124,8 @@ export const ConfigurationBar = (props:any) => {
       detect = document.getElementById('face_detect')
       recognize = document.getElementById('face_recognize')
       framesize = document.getElementById('framesize')
-
+      setLoading(1)
+      
       console.log(baseHost )
       fetch(`${baseHost}/status`).then(
         (response) => response.json()
@@ -136,10 +141,44 @@ export const ConfigurationBar = (props:any) => {
         console.error(error)
         setLoading(2)
       })
+
+      
+        
+    
     }, [props.host,refresh])
 
 
     useEffect(() => {
+      agc = document.getElementById('agc')
+      agcGain = document.getElementById('agc_gain-group')
+      gainCeiling = document.getElementById('gainceiling-group')
+      aec = document.getElementById('aec')
+      exposure = document.getElementById('aec_value-group')
+      awb = document.getElementById('awb_gain')
+      wb = document.getElementById('wb_mode-group')
+      detect = document.getElementById('face_detect')
+      recognize = document.getElementById('face_recognize')
+      framesize = document.getElementById('framesize')
+      setLoading(1)
+      console.log("aqui4")
+      
+      fetch(`${baseHost}/status`).then(
+        (response) => response.json()
+      )
+      .then(function (state) {
+        setLoading(0)
+        document
+          .querySelectorAll('.default-action')
+          .forEach(el => {
+            updateValue(el, state[el.id], false)
+          })
+      }).catch((error)=>{
+        console.error(error)
+        setLoading(2)
+      })
+     
+        
+
       //setLoading(1)
       document
         .querySelectorAll('.close')
@@ -155,12 +194,7 @@ export const ConfigurationBar = (props:any) => {
       }
     
       // Attach default on change action
-      document
-        .querySelectorAll('.default-action')
-        .forEach((el:any) => {
-          el.onchange = () => updateConfig(el)
-        })
-    
+      
       // Custom actions
       // Gain
       agc = document.getElementById('agc')
@@ -261,11 +295,11 @@ export const ConfigurationBar = (props:any) => {
             <Menu>
               <SubMenu title="Camara" icon={<TbDeviceComputerCamera size="1.8em"/>}>
               <Screen/>
-                <input type="checkbox" id="nav-toggle-cb" defaultChecked={true}/>
+                <input type="checkbox" id="nav-toggle-cb" defaultChecked={true}  onChange={({target})=>(updateConfig(target))}/>
                 <nav id="menu">
                     <div className="input-group" id="framesize-group">
                         <label htmlFor="framesize">Resolution</label>
-                        <select id="framesize" className="default-action" defaultChecked={false}>
+                        <select id="framesize" className="default-action" defaultChecked={false}  onChange={({target})=>(updateConfig(target))}>
                             <option value="10">UXGA(1600x1200)</option>
                             <option value="9">SXGA(1280x1024)</option>
                             <option value="8">XGA(1024x768)</option>
@@ -280,30 +314,30 @@ export const ConfigurationBar = (props:any) => {
                     <div className="input-group" id="quality-group">
                         <label htmlFor="quality">Quality</label>
                         <div className="range-min">10</div>
-                        <input type="range" id="quality" min="10" max="63" defaultValue="10" className="default-action"/>
+                        <input type="range" id="quality" min="10" max="63" defaultValue="10" className="default-action"  onChange={({target})=>(updateConfig(target))}/>
                         <div className="range-max">63</div>
                     </div>
                     <div className="input-group" id="brightness-group">
                         <label htmlFor="brightness">Brightness</label>
                         <div className="range-min">-2</div>
-                        <input type="range" id="brightness" min="-2" max="2" defaultValue="0" className="default-action"/>
+                        <input type="range" id="brightness" min="-2" max="2" defaultValue="0" className="default-action"  onChange={({target})=>(updateConfig(target))}/>
                         <div className="range-max">2</div>
                     </div>
                     <div className="input-group" id="contrast-group">
                         <label htmlFor="contrast">Contrast</label>
                         <div className="range-min">-2</div>
-                        <input type="range" id="contrast" min="-2" max="2" defaultValue="0" className="default-action"/>
+                        <input type="range" id="contrast" min="-2" max="2" defaultValue="0" className="default-action"  onChange={({target})=>(updateConfig(target))}/>
                         <div className="range-max">2</div>
                     </div>
                     <div className="input-group" id="saturation-group">
                         <label htmlFor="saturation">Saturation</label>
                         <div className="range-min">-2</div>
-                        <input type="range" id="saturation" min="-2" max="2" defaultValue="0" className="default-action"/>
+                        <input type="range" id="saturation" min="-2" max="2" defaultValue="0" className="default-action"  onChange={({target})=>(updateConfig(target))}/>
                         <div className="range-max">2</div>
                     </div>
                     <div className="input-group" id="special_effect-group">
                         <label htmlFor="special_effect">Special Effect</label>
-                        <select id="special_effect" className="default-action" defaultChecked={false}>
+                        <select id="special_effect" className="default-action" defaultChecked={false}  onChange={({target})=>(updateConfig(target))}>
                             <option value="0">No Effect</option>
                             <option value="1">Negative</option>
                             <option value="2">Grayscale</option>
@@ -316,7 +350,7 @@ export const ConfigurationBar = (props:any) => {
                     <div className="input-group" id="awb-group">
                         <label htmlFor="awb">AWB</label>
                         <div className="switch">
-                            <input id="awb" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="awb" type="checkbox" className="default-action" defaultChecked={true}  onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="awb"></label>
                         </div>
                     </div>
@@ -324,13 +358,13 @@ export const ConfigurationBar = (props:any) => {
                     <div className="input-group" id="awb_gain-group">
                         <label htmlFor="awb_gain">AWB Gain</label>
                         <div className="switch">
-                            <input id="awb_gain" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="awb_gain" type="checkbox" className="default-action" defaultChecked={true}  onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="awb_gain"></label>
                         </div>
                     </div>
                     <div className="input-group" id="wb_mode-group">
                         <label htmlFor="wb_mode">WB Mode</label>
-                        <select id="wb_mode" className="default-action" defaultChecked={false}>
+                        <select id="wb_mode" className="default-action" defaultChecked={false}  onChange={({target})=>(updateConfig(target))}>
                             <option value="0" >Auto</option>
                             <option value="1">Sunny</option>
                             <option value="2">Cloudy</option>
@@ -341,115 +375,115 @@ export const ConfigurationBar = (props:any) => {
                     <div className="input-group" id="aec-group">
                         <label htmlFor="aec">AEC SENSOR</label>
                         <div className="switch">
-                            <input id="aec" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="aec" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="aec"></label>
                         </div>
                     </div>
                     <div className="input-group" id="aec2-group">
                         <label htmlFor="aec2">AEC DSP</label>
                         <div className="switch">
-                            <input id="aec2" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="aec2" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="aec2"></label>
                         </div>
                     </div>
                     <div className="input-group" id="ae_level-group">
                         <label htmlFor="ae_level">AE Level</label>
                         <div className="range-min">-2</div>
-                        <input type="range" id="ae_level" min="-2" max="2" defaultValue="0" className="default-action"/>
+                        <input type="range" id="ae_level" min="-2" max="2" defaultValue="0" className="default-action"  onChange={({target})=>(updateConfig(target))}/>
                         <div className="range-max">2</div>
                     </div>
                     <div className="input-group" id="aec_value-group">
                         <label htmlFor="aec_value">Exposure</label>
                         <div className="range-min">0</div>
-                        <input type="range" id="aec_value" min="0" max="1200" defaultValue="204" className="default-action"/>
+                        <input type="range" id="aec_value" min="0" max="1200" defaultValue="204" className="default-action"  onChange={({target})=>(updateConfig(target))}/>
                         <div className="range-max">1200</div>
                     </div>
                     <div className="input-group" id="agc-group">
                         <label htmlFor="agc">AGC</label>
                         <div className="switch">
-                            <input id="agc" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="agc" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="agc"></label>
                         </div>
                     </div>
                     <div className="input-group hidden" id="agc_gain-group">
                         <label htmlFor="agc_gain">Gain</label>
                         <div className="range-min">1x</div>
-                        <input type="range" id="agc_gain" min="0" max="30" defaultValue="5" className="default-action"/>
+                        <input type="range" id="agc_gain" min="0" max="30" defaultValue="5" className="default-action"  onChange={({target})=>(updateConfig(target))}/>
                         <div className="range-max">31x</div>
                     </div>
                     <div className="input-group" id="gainceiling-group">
                         <label htmlFor="gainceiling">Gain Ceiling</label>
                         <div className="range-min">2x</div>
-                        <input type="range" id="gainceiling" min="0" max="6" defaultValue="0" className="default-action"/>
+                        <input type="range" id="gainceiling" min="0" max="6" defaultValue="0" className="default-action"  onChange={({target})=>(updateConfig(target))} />
                         <div className="range-max">128x</div>
                     </div>
                     <div className="input-group" id="bpc-group">
                         <label htmlFor="bpc">BPC</label>
                         <div className="switch">
-                            <input id="bpc" type="checkbox" className="default-action"/>
+                            <input id="bpc" type="checkbox" className="default-action" onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="bpc"></label>
                         </div>
                     </div>
                     <div className="input-group" id="wpc-group">
                         <label htmlFor="wpc">WPC</label>
                         <div className="switch">
-                            <input id="wpc" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="wpc" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="wpc"></label>
                         </div>
                     </div>
                     <div className="input-group" id="raw_gma-group">
                         <label htmlFor="raw_gma">Raw GMA</label>
                         <div className="switch">
-                            <input id="raw_gma" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="raw_gma" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="raw_gma"></label>
                         </div>
                     </div>
                     <div className="input-group" id="lenc-group">
                         <label htmlFor="lenc">Lens Correction</label>
                         <div className="switch">
-                            <input id="lenc" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="lenc" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="lenc"></label>
                         </div>
                     </div>
                     <div className="input-group" id="hmirror-group">
                         <label htmlFor="hmirror">H-Mirror</label>
                         <div className="switch">
-                            <input id="hmirror" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="hmirror" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="hmirror"></label>
                         </div>
                     </div>
                     <div className="input-group" id="vflip-group">
                         <label htmlFor="vflip">V-Flip</label>
                         <div className="switch">
-                            <input id="vflip" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="vflip" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="vflip"></label>
                         </div>
                     </div>
                     <div className="input-group" id="dcw-group">
                         <label htmlFor="dcw">DCW (Downsize EN)</label>
                         <div className="switch">
-                            <input id="dcw" type="checkbox" className="default-action" defaultChecked={true}/>
+                            <input id="dcw" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="dcw"></label>
                         </div>
                     </div>
                     <div className="input-group" id="colorbar-group">
                         <label htmlFor="colorbar">Color Bar</label>
                         <div className="switch">
-                            <input id="colorbar" type="checkbox" className="default-action"/>
+                            <input id="colorbar" type="checkbox" className="default-action" onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="colorbar"></label>
                         </div>
                     </div>
                     <div className="input-group" id="face_detect-group">
                         <label htmlFor="face_detect">Face Detection</label>
                         <div className="switch">
-                            <input id="face_detect" type="checkbox" className="default-action"/>
+                            <input id="face_detect" type="checkbox" className="default-action" onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="face_detect"></label>
                         </div>
                     </div>
                     <div className="input-group" id="face_recognize-group">
                         <label htmlFor="face_recognize">Face Recognition</label>
                         <div className="switch">
-                            <input id="face_recognize" type="checkbox" className="default-action"/>
+                            <input id="face_recognize" type="checkbox" className="default-action" onChange={({target})=>(updateConfig(target))}/>
                             <label className="slider" htmlFor="face_recognize"></label>
                         </div>
                     </div>
