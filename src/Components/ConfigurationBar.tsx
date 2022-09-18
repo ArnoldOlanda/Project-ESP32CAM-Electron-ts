@@ -19,7 +19,7 @@ interface Props{
 }
 
 export const ConfigurationBar:React.FC<Props> = ( props ) => {
- 
+
   // let enrollButton
   let agc : any;
   let agcGain : any;
@@ -31,7 +31,7 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
   let detect: any;
   let recognize : any;
   let framesize : any;
-  
+
   const [isSelected, setIsSelected] = useState(true);
   const [isLoading, setLoading] = useState(0);
   const [refresh, setRefresh] = useState(false);
@@ -54,7 +54,7 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
     el.classList.remove('disabled')
     el.disabled = false
   }
-  
+
   const updateValue = (element: any, value: any, updateRemote?: any) => {
     updateRemote = updateRemote == null ? true : updateRemote
     let initialValue
@@ -87,7 +87,7 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
       }
       }
   }
-  
+
     const updateConfig = ( element: any ) => {
       let value
       console.log(element)
@@ -106,17 +106,17 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
         default:
           return
       }
-  
+
       const query = `${baseHost}/control?var=${element.id}&val=${value}`
-  
+
       fetch(query)
         .then(response => {
           console.log(`request to ${query} finished, status: ${response.status}`)
         })
     }
 
- 
-    
+
+
 
     useEffect(() => {
       agc = document.getElementById('agc')
@@ -130,7 +130,7 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
       recognize = document.getElementById('face_recognize')
       framesize = document.getElementById('framesize')
       setLoading(1)
-      
+
       console.log(baseHost )
       fetch(`${baseHost}/status`).then(
         (response) => response.json()
@@ -147,9 +147,9 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
         setLoading(2)
       })
 
-      
-        
-    
+
+
+
     }, [props.host,refresh])
 
 
@@ -166,7 +166,7 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
       framesize = document.getElementById('framesize')
       setLoading(1)
       console.log("aqui4")
-      
+
       fetch(`${baseHost}/status`).then(
         (response) => response.json()
       )
@@ -181,8 +181,8 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
         console.error(error)
         setLoading(2)
       })
-     
-        
+
+
 
       //setLoading(1)
       document
@@ -192,16 +192,16 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
             hide(el.parentNode)
           }
         })
-      
+
       // enrollButton = document.getElementById('face_enroll')
       if(props.enrollButtonRef.current){
         props.enrollButtonRef.current.onclick = () => {
           updateConfig(props.enrollButtonRef.current)
         }
       }
-    
+
       // Attach default on change action
-      
+
       // Custom actions
       // Gain
       agc = document.getElementById('agc')
@@ -217,7 +217,7 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
           show(agcGain)
         }
       }
-    
+
       // Exposure
       aec = document.getElementById('aec')
       exposure = document.getElementById('aec_value-group')
@@ -225,7 +225,7 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
         updateConfig(aec)
         aec.checked ? hide(exposure) : show(exposure)
       }
-    
+
       // AWB
       awb = document.getElementById('awb_gain')
       wb = document.getElementById('wb_mode-group')
@@ -233,12 +233,12 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
         updateConfig(awb)
         awb.checked ? show(wb) : hide(wb)
       }
-    
+
       // Detection and framesize
       detect = document.getElementById('face_detect')
       recognize = document.getElementById('face_recognize')
       framesize = document.getElementById('framesize')
-    
+
       framesize.onchange = () => {
         updateConfig(framesize)
         if (framesize.value > 5) {
@@ -246,7 +246,7 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
           updateValue(recognize, false)
         }
       }
-    
+
       detect.onchange = () => {
         if (framesize.value > 5) {
           alert("Please select CIF or lower resolution before enabling this feature!");
@@ -259,7 +259,7 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
           updateValue(recognize, false)
         }
       }
-    
+
       recognize.onchange = () => {
         if (framesize.value > 5) {
           alert("Please select CIF or lower resolution before enabling this feature!");
@@ -275,29 +275,29 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
         }
       }
     }, [])
-    
+
     const Screen= () => {
       switch (isLoading){
         case 0: return(<></>)
         case 1: return (<LoadingScreen/>)
         case 2: return (<ErrorScreen onClick={()=>{setRefresh(!refresh)}} />)
         default: return(<></>)
-      }  
+      }
     }
-    
-    
+
+
       return (
         <SideBarDiv>
           <ProSidebar collapsed={isSelected} collapsedWidth="0px" width="320px">
             <SidebarHeader>
-                
-                  <User>  
-                      <h2 style={{textAlign: 'center', width: '90%'}}>Configuration - {props.host}</h2> 
+
+                  <User>
+                      <h2 style={{textAlign: 'center', width: '90%'}}>Configuration - {props.host}</h2>
                       <Close hidden={isSelected} onClick={()=> {setIsSelected(!isSelected)}}>
                           <img height="50%" style={{margin:"auto"}} src={close}></img>
                       </Close>
                   </User>
-                
+
             </SidebarHeader>
             <Menu>
               <SubMenu title="Camara" icon={<TbDeviceComputerCamera size="1.8em"/>}>
@@ -306,7 +306,13 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
                 <nav id="menu">
                     <div className="input-group" id="framesize-group">
                         <label htmlFor="framesize">Resolution</label>
-                        <select id="framesize" className="default-action" defaultChecked={false}  onChange={({target})=>(updateConfig(target))}>
+                        <select id="framesize" className="default-action" defaultChecked={false}  onChange={({target})=>{
+                          updateConfig(framesize)
+                          if (framesize.value > 5) {
+                            updateValue(detect, false)
+                            updateValue(recognize, false)
+                          }
+                        }}>
                             <option value="10">UXGA(1600x1200)</option>
                             <option value="9">SXGA(1280x1024)</option>
                             <option value="8">XGA(1024x768)</option>
@@ -361,11 +367,14 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
                             <label className="slider" htmlFor="awb"></label>
                         </div>
                     </div>
-                    
+
                     <div className="input-group" id="awb_gain-group">
                         <label htmlFor="awb_gain">AWB Gain</label>
                         <div className="switch">
-                            <input id="awb_gain" type="checkbox" className="default-action" defaultChecked={true}  onChange={({target})=>(updateConfig(target))}/>
+                            <input id="awb_gain" type="checkbox" className="default-action" defaultChecked={true}  onChange={({target})=>{
+                              updateConfig(awb)
+                              awb.checked ? show(wb) : hide(wb)
+                            }}/>
                             <label className="slider" htmlFor="awb_gain"></label>
                         </div>
                     </div>
@@ -382,7 +391,10 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
                     <div className="input-group" id="aec-group">
                         <label htmlFor="aec">AEC SENSOR</label>
                         <div className="switch">
-                            <input id="aec" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
+                            <input id="aec" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>{
+                              updateConfig(aec)
+                              aec.checked ? hide(exposure) : show(exposure)
+                            }}/>
                             <label className="slider" htmlFor="aec"></label>
                         </div>
                     </div>
@@ -408,7 +420,15 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
                     <div className="input-group" id="agc-group">
                         <label htmlFor="agc">AGC</label>
                         <div className="switch">
-                            <input id="agc" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>(updateConfig(target))}/>
+                            <input id="agc" type="checkbox" className="default-action" defaultChecked={true} onChange={({target})=>{
+                              updateConfig(agc)
+                              if (agc.checked) {
+                                show(gainCeiling)
+                                hide(agcGain)
+                              } else {
+                                hide(gainCeiling)
+                                show(agcGain)
+                              }}}/>
                             <label className="slider" htmlFor="agc"></label>
                         </div>
                     </div>
@@ -483,29 +503,53 @@ export const ConfigurationBar:React.FC<Props> = ( props ) => {
                     <div className="input-group" id="face_detect-group">
                         <label htmlFor="face_detect">Face Detection</label>
                         <div className="switch">
-                            <input id="face_detect" type="checkbox" className="default-action" onChange={({target})=>(updateConfig(target))}/>
+                            <input id="face_detect" type="checkbox" className="default-action" onChange={({target})=>{
+                              if (framesize.value > 5) {
+                                alert("Please select CIF or lower resolution before enabling this feature!");
+                                updateValue(detect, false)
+                                return;
+                              }
+                              updateConfig(detect)
+                              if (!detect.checked) {
+                                disable(props.enrollButtonRef.current)
+                                updateValue(recognize, false)
+                              }
+                            }}/>
                             <label className="slider" htmlFor="face_detect"></label>
                         </div>
                     </div>
                     <div className="input-group" id="face_recognize-group">
                         <label htmlFor="face_recognize">Face Recognition</label>
                         <div className="switch">
-                            <input id="face_recognize" type="checkbox" className="default-action" onChange={({target})=>(updateConfig(target))}/>
+                            <input id="face_recognize" type="checkbox" className="default-action" onChange={({target})=>{
+                              if (framesize.value > 5) {
+                                alert("Please select CIF or lower resolution before enabling this feature!");
+                                updateValue(recognize, false)
+                                return;
+                              }
+                              updateConfig(recognize)
+                              if (recognize.checked) {
+                                enable(props.enrollButtonRef.current)
+                                updateValue(detect, true)
+                              } else {
+                                disable(props.enrollButtonRef.current)
+                              }
+                            }}/>
                             <label className="slider" htmlFor="face_recognize"></label>
                         </div>
                     </div>
-                    
+
                 </nav>
-                
+
               </SubMenu>
-              
+
             </Menu>
-                
+
         </ProSidebar>
         <ButtonSidebar onClick={()=> {setIsSelected(!isSelected)}} hidden={!isSelected}>
         <img height="100%" width="60%" src={menu} ></img>
     </ButtonSidebar>
-</SideBarDiv>        
+</SideBarDiv>
 )}
 
 const SideBarDiv= styled.div`
@@ -513,7 +557,7 @@ const SideBarDiv= styled.div`
     display: flex;
     position: absolute;
     right: 0;
-`   
+`
 
 const User= styled.div`
   width: 100%;
@@ -529,7 +573,7 @@ const ButtonSidebar= styled.div`
     height: 50px;
     width: 50px;
     text-align: center;
-    
+
     &:hover{
         background-color: #323232;
     }
@@ -539,7 +583,7 @@ const Close= styled.div`
     width: 30px;
     border-radius: 50%;
     display: flex;
-       
+
     &:hover{
         background-color: #585858;
     }

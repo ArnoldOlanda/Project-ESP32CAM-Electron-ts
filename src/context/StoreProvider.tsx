@@ -20,6 +20,7 @@ const initialContext = {
     dispatch: () => {}
 }
 
+
 const StoreContext = createContext<Icontext>(initialContext);
 
 const StoreProvider = ({children}:any) =>{

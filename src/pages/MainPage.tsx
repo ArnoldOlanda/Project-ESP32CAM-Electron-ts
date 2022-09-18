@@ -83,10 +83,10 @@ export const MainPage: React.FC = () => {
 
   return (
     <Box>
-      <SideBar 
-      name={ user} 
-      cameras={ cameras } 
-      users={ users } 
+      <SideBar
+      name={ user}
+      cameras={ cameras! }
+      users={ users! }
       onClickCamera={ onClickCamera } />
       {
         cameraIsSelected ?
@@ -96,8 +96,8 @@ export const MainPage: React.FC = () => {
             <Buttons>
               <Button>Captura</Button>
 
-              <Button 
-              ref={ enrollButtonRef } 
+              <Button
+              ref={ enrollButtonRef }
               onClick={() => updateConfig( enrollButtonRef.current )}
               >
                 Guardar Rostro
@@ -120,8 +120,8 @@ export const MainPage: React.FC = () => {
             type &&
             <ConfigurationBar
               host = { actualHost }
-              enrollButtonRef = { enrollButtonRef } 
-            /> 
+              enrollButtonRef = { enrollButtonRef }
+            />
           }
         </>)
         :( <div style={{ display:'flex',flexDirection:'column',alignItems:'center'}}>
@@ -130,13 +130,13 @@ export const MainPage: React.FC = () => {
               <AiOutlineArrowLeft  size={60} color='gray'/>
               <h1 style={{marginLeft:'20px', color:'gray'}}>
                 {
-                  type 
+                  type
                   ? 'Seleccione una camara o cree una nueva'
                   : 'Para empezar seleccione una camara'
                 }
               </h1>
             </div>
-            
+
           </div>)
       }
     </Box>
@@ -169,7 +169,7 @@ const Buttons = styled.div`
   justify-content: space-between;
 `
 const Button = styled.div`
- 
+
   background-color: #ff3034;
   padding: 5px 12px;
   border-radius: 5px;
@@ -180,6 +180,6 @@ const Button = styled.div`
   }
 
   @media (max-width: 500px){
-    
+
   }
 `

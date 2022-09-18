@@ -1,10 +1,19 @@
-export interface initialState{
+/*export interface initialState{
     user: string;
     actualHost?: string;
     cameras: Camera[];
     token?: string;
     users: UsersArr[];
     type?: boolean;
+}*/
+
+export interface initialState{
+  user: string;
+  actualHost?: string;
+  cameras?:  Camera[];
+  token?: string;
+  users?: UsersArr[];
+  type?: boolean;
 }
 
 export interface ResponseLogin {
@@ -34,4 +43,3 @@ export interface UsersArr {
     password: string;
     user:     string;
 }
-   
