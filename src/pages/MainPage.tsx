@@ -7,6 +7,7 @@ import {AiFillVideoCamera,AiOutlineArrowLeft} from 'react-icons/ai'
 import { ConfigurationBar } from '../Components/ConfigurationBar';
 import { SideBar } from '../Components/SideBar';
 import { StoreContext } from '../context/StoreProvider';
+import { AES_en, algorithm } from '@/service/Encryption';
 
 
 export const MainPage: React.FC = () => {
@@ -24,6 +25,7 @@ export const MainPage: React.FC = () => {
 
   const onClickCamera = () => {
     setCameraIsSelected(true);
+
   }
 
   let baseHost = useMemo(() => "http://" + actualHost, [actualHost]);

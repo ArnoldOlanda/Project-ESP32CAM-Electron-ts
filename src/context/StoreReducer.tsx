@@ -72,7 +72,8 @@ const storeReducer = (state: initialState, action: any ) =>{
               return {
                 ...state,
                 user: action.body.user,
-                type: action.body.type
+                type: action.body.type,
+                users: []
               }
         case types.Login:
             setValue("user", action.body.user)
