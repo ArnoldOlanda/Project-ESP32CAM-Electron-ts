@@ -12,12 +12,12 @@ const getInitialValue = (key: string, initialValue: TinitialValue) => {
       // Get from local storage by key
       const item = JSON.parse(window.localStorage.getItem(key) || "");
       // Parse stored json or if none return initialValue
-      
+
       return item ? item : initialValue;
     } catch (error) {
       // If error also return initialValue
       console.log(error);
-      
+
       return initialValue;
     }
 }
@@ -41,8 +41,15 @@ const types ={
     UpdateUsers: "UpdateUsers",
     Register: "Register",
 }
-
-
+/*
+interface initialState{
+    user?: string;
+    actualHost?: string;
+    cameras: object[];
+    token?: string;
+    users?: object[];
+    type?: boolean;
+}*/
 // interface initialState{
 //     user?: string;
 //     actualHost: string;
@@ -53,7 +60,7 @@ const types ={
 // }
 
 const storeReducer = (state: initialState, action: any ) =>{
-    
+
     switch(action.type){
         case types.Register:
               setValue("user", action.body.user)
@@ -65,7 +72,8 @@ const storeReducer = (state: initialState, action: any ) =>{
               return {
                 ...state,
                 user: action.body.user,
-                type: action.body.type
+                type: action.body.type,
+                users: []
               }
         case types.Login:
             setValue("user", action.body.user)
@@ -97,10 +105,10 @@ const storeReducer = (state: initialState, action: any ) =>{
 
         case types.AddCamera:
             setValue("user", action.body.user)
-            setValue("cameras", [...state.cameras, action.body])
+            setValue("cameras", [...state.cameras!, action.body])
             return {
                 ...state,
-                cameras: [...state.cameras, action.body]
+                cameras: [...state.cameras!, action.body]
             }
         case types.ChangeActualHost:
             setValue("actualHost", action.body)

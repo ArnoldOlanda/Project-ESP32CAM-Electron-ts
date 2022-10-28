@@ -7,6 +7,7 @@ import url_base from "../config/variables"
 import { LoadingScreen } from '../Components/LoadingScreen';
 import { useForm } from '../hooks/useForm';
 import { types } from '../context/StoreReducer';
+import { AES_en } from '@/service/Encryption';
 
 interface IformState{
   user: string;
@@ -20,19 +21,19 @@ export const Register = () => {
     const {store, dispatch} = useContext(StoreContext);
     const [isLoading, setLoading] = useState(false);
 
-    
+
 
     const {formState, onInputChange, onSetNewState }= useForm({
-      user: '', 
-      password: '', 
-      password2: '', 
+      user: '',
+      password: '',
+      password2: '',
       msg:''
     });
 
     const { msg,password,password2,user } = formState as IformState
-    
+
     const onPressRegister = async () => {
-      
+
       if(user=='' || password=='' || password2=='') {
         onSetNewState('msg','*Debe llenar todos los campos')
         return false;
@@ -47,9 +48,10 @@ export const Register = () => {
       }
 
       const body = {
-        user: user,
-        password: password,
-        type: true
+        user: AES_en(user),
+        password: AES_en(password),
+        type: AES_en(true),
+        owner: AES_en(1)
       }
       setLoading(true)
       const response = await fetch(`${ url_base }/api/users`,{
@@ -57,58 +59,59 @@ export const Register = () => {
           body:JSON.stringify(body),
           headers: { 'Content-Type': 'application/json' }
       })
-      
+
       if(response.status == 404){
         setLoading(false)
         alert("Error: Server not found")
-        
+
       }
       else if (response.status == 400){
         setLoading(false)
         const data = await response.json()
-        onSetNewState('msg',data.msg)  
+        onSetNewState('msg',data.msg)
         return
 
       } else{
-        navigate('/MainPage');
+
         dispatch({
           type: types.Register,
           body: {
-            user:user,  
+            user:user,
             type: true
         }});
+        navigate('/MainPage');
       }
-      
+
     }
-  
+
     return (
       <Container>
         <Box>
-          <ArrowBack to="/login"> 
+          <ArrowBack to="/login">
             <IoIosArrowRoundBack style={{color: 'black', height: '30px', width: '30px', position: 'absolute', left: 15, top: 15}}/>
           </ArrowBack>
           <Title>Crear Cuenta</Title>
           <Subtitle>Creará una cuenta de administrador</Subtitle>
           <div style={{display: 'block', textAlign: 'center'}}>
 
-            <InputLogin 
-            onChange={ onInputChange } 
-            placeholder="Usuario" 
-            name="user" 
+            <InputLogin
+            onChange={ onInputChange }
+            placeholder="Usuario"
+            name="user"
             required />
 
-            <InputLogin 
-            onChange={ onInputChange } 
-            type="password" 
-            placeholder="Constraseña" 
-            name="password"  
+            <InputLogin
+            onChange={ onInputChange }
+            type="password"
+            placeholder="Constraseña"
+            name="password"
             required />
 
-            <InputLogin 
-            onChange={ onInputChange } 
-            type="password" 
-            placeholder="Confirmar contraseña" 
-            name="password2" 
+            <InputLogin
+            onChange={ onInputChange }
+            type="password"
+            placeholder="Confirmar contraseña"
+            name="password2"
             required />
 
             <ButtonLogin type ="submit" value="Aceptar" onClick={onPressRegister} />
@@ -124,8 +127,8 @@ export const Register = () => {
 }
 
 const Container = styled.div`
-  display: flex; 
-  align-content: center; 
+  display: flex;
+  align-content: center;
   height: 100vh;
 `
 
@@ -143,7 +146,7 @@ const Box= styled.div`
   height: 100vh;
   width: 100%;
   border-radius: 10px;
-  
+
 `
 const Title = styled.p`
   color: black;
@@ -171,9 +174,9 @@ const InputLogin= styled.input`
   font-size: 14px;
   &:focus{
     outline: solid 2px #3578E5;
-   
+
   }
-  
+
 `
 const ButtonLogin= styled.input`
   height: 49px;
@@ -185,9 +188,9 @@ const ButtonLogin= styled.input`
   background-color: black;
   &:hover{
     background-color: #494949;
-   
+
   }
-  
+
 `
 const ArrowBack = styled(NavLink)`
     svg{
@@ -195,7 +198,7 @@ const ArrowBack = styled(NavLink)`
         &:hover{
             background-color: #dfdfdf;
         }
-        
+
 
     }
 `

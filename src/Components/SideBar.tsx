@@ -17,11 +17,12 @@ import '../styles.scss';
 import menu from '../images/menu2.svg'
 import close from '../images/Recurso 1.svg'
 import { Camera as ICamera, UsersArr } from '@/interfaces';
+import { AES_de, AES_en } from '@/service/Encryption';
 
 interface Props{
     name: string;
     cameras: ICamera[];
-    users: UsersArr[];    
+    users: UsersArr[];
     onClickCamera: () => void;
 }
 
@@ -80,12 +81,12 @@ export const SideBar:React.FC<Props> = (props) => {
             )
         else
             return (
-                <p style={{ 
-                    marginLeft: '20px', 
-                    marginTop: '20px', 
+                <p style={{
+                    marginLeft: '20px',
+                    marginTop: '20px',
                     marginBottom: '20px' }}
-                > 
-                   Aun no tienes ninguna camara 
+                >
+                   Aun no tienes ninguna camara
                 </p>)
     }, [props.cameras, refreshStatus])
 
@@ -96,10 +97,10 @@ export const SideBar:React.FC<Props> = (props) => {
                 {
                     props.users.map((e: any, i: number) => (
                         <Menu key={i}>
-                            <User 
-                            change={changeLoading} 
-                            id={e.id} 
-                            user={e.user} 
+                            <User
+                            change={changeLoading}
+                            id={e.id}
+                            user={e.user}
                             password={e.password} />
                         </Menu>
                     ))
@@ -206,10 +207,10 @@ export const SideBar:React.FC<Props> = (props) => {
 
             try {
                 const body = JSON.stringify({
-                    user: userRef.current.value,
-                    password: passRef.current.value,
-                    owner: uid,
-                    type: false
+                    user: AES_en(userRef.current.value),
+                    password: AES_en(passRef.current.value),
+                    owner: AES_en(uid),
+                    type: AES_en(false)
                 })
 
                 setLoading(true)
@@ -243,7 +244,7 @@ export const SideBar:React.FC<Props> = (props) => {
 
                     dispatch({
                         type: types.UpdateUsers,
-                        body: users
+                        body: JSON.parse(AES_de(users)),
                     });
                     setisModalSelectedUse(!isModalSelectedUse)
                     setError('')
@@ -259,8 +260,6 @@ export const SideBar:React.FC<Props> = (props) => {
                 setLoading(false)
             }
         }
-
-
     }
 
     const onClickRefreshStatus = () => {
@@ -311,10 +310,10 @@ export const SideBar:React.FC<Props> = (props) => {
 
 
                             <div hidden={!isModalSelectedCam}>
-                                <AddCamera 
-                                change={changeCam} 
-                                error={error} 
-                                nameRef={nameRef} 
+                                <AddCamera
+                                change={changeCam}
+                                error={error}
+                                nameRef={nameRef}
                                 ipRef={ipRef} />
 
                                 <BoxButtonAdd onClick={addCamera}>
@@ -399,7 +398,7 @@ const ButtonSidebar = styled.div`
     height: 50px;
     width: 50px;
     text-align: center;
-    
+
     &:hover{
         background-color: #323232;
     }
@@ -411,7 +410,7 @@ const Close = styled.div`
     display: flex;
     align-items:center;
     justify-content: center;
-       
+
     &:hover{
         background-color: #585858;
     }
@@ -421,7 +420,7 @@ const BoxButtonAdd = styled.div`
     justify-content: center;
     align-items: center;
     padding: 8px 0px;
-    
+
 `
 
 const ButtonAdd = styled.div`
@@ -437,5 +436,5 @@ const ButtonAdd = styled.div`
     border-radius: 10px;
     &:hover{
         background-color: #fc4d50;
-    }    
+    }
 `
