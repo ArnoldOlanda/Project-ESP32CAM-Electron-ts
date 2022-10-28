@@ -14,6 +14,7 @@ import { useForm } from '../hooks/useForm'
 import { ResponseLogin } from '@/interfaces'
 
 import { AES_en, AES_de } from '@/service/Encryption'
+import { EncryptionRSA } from '@/service/EncryptionRSA'
 
 interface Iform{
   user: string;
@@ -42,7 +43,10 @@ export const Login:React.FC = () => {
     }
 
     try {
-      const body = JSON.stringify({ user: AES_en(user), password: AES_en(password)});
+      const body = JSON.stringify({
+        user: AES_en(user), 
+        password: EncryptionRSA(password)
+      });
 
       setLoading(true)
 
