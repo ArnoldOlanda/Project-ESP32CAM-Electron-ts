@@ -43,9 +43,14 @@ export const Login:React.FC = () => {
     }
 
     try {
+
+      const encryptedPassword = EncryptionRSA( password )
+      //console.log({encryptedPassword});
+      
+
       const body = JSON.stringify({
         user: AES_en(user), 
-        password: EncryptionRSA(password)
+        password: encryptedPassword
       });
 
       setLoading(true)
@@ -77,7 +82,7 @@ export const Login:React.FC = () => {
         setLoading(false)
         const data: ResponseLogin = await response.json();
         const { user, cameras, token, users} = data;
-        console.log(data)
+        // console.log(data)
         let user1 = JSON.parse(AES_de(user))
 
 

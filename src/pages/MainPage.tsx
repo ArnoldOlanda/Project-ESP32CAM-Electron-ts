@@ -2,19 +2,18 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
-import {AiFillVideoCamera,AiOutlineArrowLeft} from 'react-icons/ai'
+import { AiFillVideoCamera, AiOutlineArrowLeft } from 'react-icons/ai'
 
 import { ConfigurationBar } from '../Components/ConfigurationBar';
 import { SideBar } from '../Components/SideBar';
 import { StoreContext } from '../context/StoreProvider';
-import { AES_en, algorithm } from '@/service/Encryption';
 
 
 export const MainPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const { store, dispatch} = useContext(StoreContext);
+  const { store, dispatch } = useContext(StoreContext);
   const { user, actualHost, cameras, token, users, type } = store;
   const [cameraIsSelected, setCameraIsSelected] = useState(false);
 
@@ -25,7 +24,6 @@ export const MainPage: React.FC = () => {
 
   const onClickCamera = () => {
     setCameraIsSelected(true);
-
   }
 
   let baseHost = useMemo(() => "http://" + actualHost, [actualHost]);
@@ -33,11 +31,11 @@ export const MainPage: React.FC = () => {
 
   useEffect(() => {
 
-    if (token == "" || user == "") {
+    if (token === "" || user === "") {
       alert("Debe iniciar sesión")
       navigate('/');
     }
-    if(actualHost!='') setCameraIsSelected(true);
+    if (actualHost !== '') setCameraIsSelected(true);
 
   }, []);
 
@@ -69,13 +67,13 @@ export const MainPage: React.FC = () => {
 
   const stopStream = () => {
     window.stop();
-    if(streamButtonRef.current){
+    if (streamButtonRef.current) {
       streamButtonRef.current.innerHTML = 'Iniciar'
     }
   }
 
   const startStream = () => {
-    if(viewRef.current && streamButtonRef.current){
+    if (viewRef.current && streamButtonRef.current) {
       viewRef.current.src = `${streamUrl}/stream`
       streamButtonRef.current.innerHTML = 'Parar'
     }
@@ -86,55 +84,60 @@ export const MainPage: React.FC = () => {
   return (
     <Box>
       <SideBar
-      name={ user}
-      cameras={ cameras! }
-      users={ users! }
-      onClickCamera={ onClickCamera } />
+        name={user}
+        cameras={cameras!}
+        users={users!}
+        onClickCamera={onClickCamera}
+      />
       {
         cameraIsSelected ?
-        (<>
-          <CamBox>
-            <img height="100%" width="100%" ref={viewRef} src="" />
-            <Buttons>
-              <Button>Captura</Button>
+          (<>
+            <CamBox>
+              <img
+                height="100%"
+                width="100%"
+                ref={viewRef}
+                src="" 
+              />
+              <Buttons>
+                <Button>Captura</Button>
 
-              <Button
-              ref={ enrollButtonRef }
-              onClick={() => updateConfig( enrollButtonRef.current )}
-              >
-                Guardar Rostro
-              </Button>
+                <Button
+                  ref={enrollButtonRef}
+                  onClick={() => updateConfig(enrollButtonRef.current)}
+                >
+                  Guardar Rostro
+                </Button>
 
-              <Button ref={streamButtonRef} onClick={() => {
-                if(streamButtonRef.current){
-                  const streamEnabled = streamButtonRef.current.innerHTML === 'Parar'
-                  if (streamEnabled) {
-                    stopStream()
-                  } else {
-                    startStream()
+                <Button ref={streamButtonRef} onClick={() => {
+                  if (streamButtonRef.current) {
+
+                    const streamEnabled = streamButtonRef.current.innerHTML === 'Parar'
+                    if (streamEnabled) stopStream();
+                    else startStream();
+
                   }
-                }
-              }}>Iniciar</Button>
+                }}>Iniciar</Button>
 
-            </Buttons>
-          </CamBox>
-          {
-            type &&
-            <ConfigurationBar
-              host = { actualHost }
-              enrollButtonRef = { enrollButtonRef }
-            />
-          }
-        </>)
-        :( <div style={{ display:'flex',flexDirection:'column',alignItems:'center'}}>
-            <AiFillVideoCamera size={80} color='gray'/>
-            <div style={{display:'flex', alignItems:'center'}}>
-              <AiOutlineArrowLeft  size={60} color='gray'/>
-              <h1 style={{marginLeft:'20px', color:'gray'}}>
+              </Buttons>
+            </CamBox>
+            {
+              type &&
+              <ConfigurationBar
+                host={actualHost}
+                enrollButtonRef={enrollButtonRef}
+              />
+            }
+          </>)
+          : (<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <AiFillVideoCamera size={80} color='gray' />
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <AiOutlineArrowLeft size={60} color='gray' />
+              <h1 style={{ marginLeft: '20px', color: 'gray' }}>
                 {
                   type
-                  ? 'Seleccione una camara o cree una nueva'
-                  : 'Para empezar seleccione una camara'
+                    ? 'Seleccione una camara o cree una nueva'
+                    : 'Para empezar seleccione una camara'
                 }
               </h1>
             </div>

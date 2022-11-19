@@ -15,10 +15,10 @@ export const EncryptionRSA = (value:string) => {
     const encrypt = new JSEncrypt()
 
     encrypt.setPublicKey(publicKey)
+    
     const encrypted = encrypt.encrypt(value) as string
 
     console.log(encrypted);
     
-
     return encrypted
 }
