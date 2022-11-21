@@ -58,11 +58,11 @@ async function createWindow() {
     win?.webContents.send('main-process-message', new Date().toLocaleString())
   })
 
-  // Make all links open with the browser, not with the application
-  win.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('https:')) shell.openExternal(url)
-    return { action: 'deny' }
-  })
+  // // Make all links open with the browser, not with the application
+  // win.webContents.setWindowOpenHandler(({ url }) => {
+  //   if (url.startsWith('https:')) shell.openExternal(url)
+  //   return { action: 'deny' }
+  // })
 }
 
 app.whenReady().then(createWindow)
@@ -89,18 +89,18 @@ app.on('activate', () => {
   }
 })
 
-// new window example arg: new windows url
-ipcMain.handle('open-win', (event, arg) => {
-  const childWindow = new BrowserWindow({
-    webPreferences: {
-      preload,
-    },
-  })
+// // new window example arg: new windows url
+// ipcMain.handle('open-win', (event, arg) => {
+//   const childWindow = new BrowserWindow({
+//     webPreferences: {
+//       preload,
+//     },
+//   })
 
-  if (app.isPackaged) {
-    childWindow.loadFile(indexHtml, { hash: arg })
-  } else {
-    childWindow.loadURL(`${url}/#${arg}`)
-    // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
-  }
-})
+//   if (app.isPackaged) {
+//     childWindow.loadFile(indexHtml, { hash: arg })
+//   } else {
+//     childWindow.loadURL(`${url}/#${arg}`)
+//     // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
+//   }
+// })
