@@ -81,6 +81,16 @@ export const MainPage: React.FC = () => {
 
   if (baseHost !== actualHost && viewRef.current != null) stopStream()
 
+
+  /*
+  <Button>Captura</Button>
+
+                <Button
+                  ref={enrollButtonRef}
+                  onClick={() => updateConfig(enrollButtonRef.current)}
+                >
+                  Guardar Rostro
+                </Button>*/
   return (
     <Box>
       <SideBar
@@ -97,17 +107,10 @@ export const MainPage: React.FC = () => {
                 height="100%"
                 width="100%"
                 ref={viewRef}
-                src="" 
+                src=""
               />
               <Buttons>
-                <Button>Captura</Button>
 
-                <Button
-                  ref={enrollButtonRef}
-                  onClick={() => updateConfig(enrollButtonRef.current)}
-                >
-                  Guardar Rostro
-                </Button>
 
                 <Button ref={streamButtonRef} onClick={() => {
                   if (streamButtonRef.current) {
@@ -171,12 +174,12 @@ const CamBox = styled.div`
 const Buttons = styled.div`
   padding-top: 12px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 `
 const Button = styled.div`
 
   background-color: #ff3034;
-  padding: 5px 12px;
+  padding: 5px 30px;
   border-radius: 5px;
   font-size: 16px;
   text-align: center;

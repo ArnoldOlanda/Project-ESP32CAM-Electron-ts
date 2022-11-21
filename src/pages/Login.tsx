@@ -46,10 +46,10 @@ export const Login:React.FC = () => {
 
       const encryptedPassword = EncryptionRSA( password )
       //console.log({encryptedPassword});
-      
+
 
       const body = JSON.stringify({
-        user: AES_en(user), 
+        user: AES_en(user),
         password: encryptedPassword
       });
 
@@ -113,7 +113,7 @@ export const Login:React.FC = () => {
   return (
     <div style={{display: 'flex', alignContent: 'center', height: '100vh'}}>
       <Box>
-        <p style={{color: 'black', textAlign: 'center', fontSize: '22px'}}> Project ESP32 CAM <img height="16px" src={cam}/></p>
+        <p style={{color: 'black', textAlign: 'center', fontSize: '22px'}}> Sistema de Visualización de Cámaras ESP32 UCSM <img height="16px" src={cam}/></p>
         <p style={{color: 'black', textAlign: 'center', fontSize: '20px'}}>Iniciar Sesion</p>
         <div style={{display: 'block', textAlign: 'center'}} >
           <InputLogin onChange={ onInputChange } name='user'  placeholder="Usuario" required></InputLogin>
