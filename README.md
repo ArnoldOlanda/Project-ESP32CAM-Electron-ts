@@ -1,39 +1,9 @@
-# electron-vite-react
+# ESP32 electron react app
+Esta es la aplicacion de escritorio multiplataforma para el sistema de camaras de visualizacion de camaras ESP32 UCSM 
 
-[![awesome-vite](https://awesome.re/mentioned-badge.svg)](https://github.com/vitejs/awesome-vite)
-![GitHub stars](https://img.shields.io/github/stars/caoxiemeihao/vite-react-electron?color=fa6470)
-![GitHub issues](https://img.shields.io/github/issues/caoxiemeihao/vite-react-electron?color=d8b22d)
-![GitHub license](https://img.shields.io/github/license/caoxiemeihao/vite-react-electron)
-[![Required Node.JS >= 14.18.0 || >=16.0.0](https://img.shields.io/static/v1?label=node&message=14.18.0%20||%20%3E=16.0.0&logo=node.js&color=3f893e)](https://nodejs.org/about/releases)
+---
+## 📂 Estructura de directorios 
 
-English | [简体中文](README.zh-CN.md)
-
-## 👀 Overview
-
-📦 Ready out of the box  
-🎯 Based on the official [template-react-ts](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts), project structure will be familiar to you  
-🌱 Easily extendable and customizable  
-💪 Supports Node.js API in the renderer process  
-🔩 Supports C/C++ native addons  
-🐞 Debugger configuration included  
-🖥 Easy to implement multiple windows  
-
-## 🛫 Quick start
-
-```sh
-npm create electron-vite
-```
-
-![electron-vite-react.gif](https://github.com/electron-vite/electron-vite-react/blob/main/public/electron-vite-react.gif?raw=true)
-
-## 🐞 Debug
-
-![electron-vite-react-debug.gif](https://github.com/electron-vite/electron-vite-react/blob/main/public/electron-vite-react-debug.gif?raw=true)
-
-## 📂 Directory structure
-
-Familiar React application structure, just with `electron` folder on the top :wink:  
-*Files in this folder will be separated from your React application and built into `dist/electron`*  
 
 ```tree
 ├── electron                  Electron-related code
@@ -54,22 +24,27 @@ Familiar React application structure, just with `electron` folder on the top :wi
 └── src                       Renderer source code, your React application
 ```
 
-## 🚨 Be aware
-
-This template integrates Node.js API to the renderer process by default. If you want to follow **Electron Security Concerns** you might want to disable this feature. You will have to expose needed API by yourself.  
-
-To get started, remove the option as shown below. This will [modify the Vite configuration and disable this feature](https://github.com/electron-vite/vite-plugin-electron/tree/main/packages/electron-renderer#config-presets-opinionated).
-
-```diff
-# vite.config.ts
-
-electron({
-- renderer: {}
-})
+**Comando para reconstruir los modulos de node**
 ```
+npm install
+```
+o
+```
+npm i
+```
+Para ejecutar la aplicacion en modo desarrollo ejecute el siguiente comando
+```
+npm run dev
+```
+Si desea conectarse a la api en modo de desarrollo actualice el archivo `config.js` y cambie la url base.
+```javascript
+const url_base = 'https://esp32-api-production.up.railway.app';
+// const url_base = 'http://localhost:5000';
 
-## ❔ FAQ
-
-- [dependencies vs devDependencies](https://github.com/electron-vite/vite-plugin-electron/tree/main/packages/electron-renderer#dependencies-vs-devdependencies)
-- [Using C/C++ native addons in renderer](https://github.com/electron-vite/vite-plugin-electron/tree/main/packages/electron-renderer#load-nodejs-cc-native-modules)
-- [Node.js ESM packages](https://github.com/electron-vite/vite-plugin-electron/tree/main/packages/electron-renderer#nodejs-esm-packages) (e.g. `execa` `node-fetch`)
+export default url_base
+```
+## Hacer el build de la aplicacion electron
+Para hacer el build de la aplicacion ejecute el siguiente comando que generara el archivo `.exe` que podra instalar en su sistema operativo, este archivo se encuentra en la carpeta `release`
+```
+npm run build 
+```
