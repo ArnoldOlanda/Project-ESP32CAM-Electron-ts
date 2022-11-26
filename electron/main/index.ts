@@ -34,7 +34,7 @@ const indexHtml = join(process.env.DIST, 'index.html')
 async function createWindow() {
 
   win = new BrowserWindow({
-    title: 'Main window',
+    title: 'SVC-ESP32-UCSM',
     //fullscreen: true,
     icon: join(process.env.PUBLIC, 'favicon.svg'),
     webPreferences: {
