@@ -1,10 +1,11 @@
-import React, { useContext, useState, useCallback, useRef } from 'react'
+import React, { useContext, useState, useCallback, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarContent, SidebarFooter, } from 'react-pro-sidebar';
 import { IoLogOutOutline, IoClose, IoPersonOutline, IoReload } from 'react-icons/io5';
 import { TbDeviceComputerCamera } from "react-icons/tb";
 import styled from 'styled-components'
 import jwtDecode from 'jwt-decode';
+import { ipcRenderer } from 'electron'
 
 import { isValidIP } from '../helpers';
 import url_base from "../config/variables"
@@ -19,7 +20,7 @@ import close from '../images/Recurso 1.svg'
 import { Camera as ICamera, UsersArr } from '@/interfaces';
 import { AES_de, AES_en } from '@/service/Encryption';
 
-interface Props{
+interface Props {
     name: string;
     cameras: ICamera[];
     users: UsersArr[];
@@ -27,7 +28,7 @@ interface Props{
 }
 
 
-export const SideBar:React.FC<Props> = (props) => {
+export const SideBar: React.FC<Props> = (props) => {
     const navigate = useNavigate();
 
     const { store, dispatch } = useContext(StoreContext);
@@ -65,13 +66,13 @@ export const SideBar:React.FC<Props> = (props) => {
             return (
                 <>
                     {
-                        props.cameras.map(({ id, ip, name }:ICamera, i: number) => (
+                        props.cameras.map(({ id, ip, name }: ICamera, i: number) => (
                             <Menu key={i}>
                                 <Camera
                                     change={changeLoading}
-                                    id={ id }
-                                    name={ name }
-                                    ip={ ip }
+                                    id={id}
+                                    name={name}
+                                    ip={ip}
                                     onClickCamera={props.onClickCamera}
                                     refreshStatus={refreshStatus}
                                 />
@@ -84,9 +85,10 @@ export const SideBar:React.FC<Props> = (props) => {
                 <p style={{
                     marginLeft: '20px',
                     marginTop: '20px',
-                    marginBottom: '20px' }}
+                    marginBottom: '20px'
+                }}
                 >
-                   Aun no tienes ninguna camara
+                    Aun no tienes ninguna camara
                 </p>)
     }, [props.cameras, refreshStatus])
 
@@ -94,17 +96,17 @@ export const SideBar:React.FC<Props> = (props) => {
         if (props.users.length > 0) {
             return (
                 <>
-                {
-                    props.users.map((e: any, i: number) => (
-                        <Menu key={i}>
-                            <User
-                            change={changeLoading}
-                            id={e.id}
-                            user={e.user}
-                            password={e.password} />
-                        </Menu>
-                    ))
-                }
+                    {
+                        props.users.map((e: any, i: number) => (
+                            <Menu key={i}>
+                                <User
+                                    change={changeLoading}
+                                    id={e.id}
+                                    user={e.user}
+                                    password={e.password} />
+                            </Menu>
+                        ))
+                    }
                 </>
             )
         } else return (<p style={{ marginLeft: '20px', marginTop: '20px', marginBottom: '20px' }}> Aun no tienes usuarios registrados </p>)
@@ -266,6 +268,14 @@ export const SideBar:React.FC<Props> = (props) => {
         setRefreshStatus(!refreshStatus)
     }
 
+    useEffect(() => {
+        console.log(JSON.stringify(store,null,4));
+    }, [])
+    
+    const onClickDownloadFile = () => {
+        ipcRenderer.send('download',{ url: `${url_base}/logsSistema/${store.id}` })
+    }
+
     return (
         <SideBarDiv>
             <ProSidebar collapsed={isSelected} collapsedWidth="0px">
@@ -295,7 +305,7 @@ export const SideBar:React.FC<Props> = (props) => {
                                     <div hidden={isModalSelectedCam}>
                                         <BoxButtonAdd
                                             onClick={() => {
-                                                if(nameRef.current && ipRef.current){
+                                                if (nameRef.current && ipRef.current) {
                                                     nameRef.current.value = "";
                                                     ipRef.current.value = "";
                                                 }
@@ -311,10 +321,10 @@ export const SideBar:React.FC<Props> = (props) => {
 
                             <div hidden={!isModalSelectedCam}>
                                 <AddCamera
-                                change={changeCam}
-                                error={error}
-                                nameRef={nameRef}
-                                ipRef={ipRef} />
+                                    change={changeCam}
+                                    error={error}
+                                    nameRef={nameRef}
+                                    ipRef={ipRef} />
 
                                 <BoxButtonAdd onClick={addCamera}>
                                     <ButtonAdd>
@@ -348,6 +358,16 @@ export const SideBar:React.FC<Props> = (props) => {
                             </SubMenu> : <></>
                         }
                     </Menu>
+                    {
+                        type &&
+                        (
+                            <BoxButtonAdd>
+                                <ButtonAdd onClick={onClickDownloadFile}>
+                                    Descargar Archivo de Registro
+                                </ButtonAdd>
+                            </BoxButtonAdd>
+                        )
+                    }
                 </SidebarContent>
 
                 <SidebarFooter>
@@ -420,6 +440,21 @@ const BoxButtonAdd = styled.div`
     justify-content: center;
     align-items: center;
     padding: 8px 0px;
+    a{
+        height: 30px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 16px;
+        margin: 0px 10px;
+        background-color: #ff3034;
+        border-radius: 10px;
+        &:hover{
+            background-color: #fc4d50;
+        }
+    }
 
 `
 
@@ -434,6 +469,7 @@ const ButtonAdd = styled.div`
     margin: 0px 10px;
     background-color: #ff3034;
     border-radius: 10px;
+    cursor: pointer;
     &:hover{
         background-color: #fc4d50;
     }

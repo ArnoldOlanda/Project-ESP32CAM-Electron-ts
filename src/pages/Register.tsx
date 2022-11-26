@@ -79,7 +79,7 @@ export const Register = () => {
             user:user,
             type: true
         }});
-        navigate('/MainPage');
+        navigate('/login');
       }
 
     }

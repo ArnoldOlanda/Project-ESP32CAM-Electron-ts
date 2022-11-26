@@ -13,7 +13,8 @@ process.env.DIST = join(__dirname, '../..')
 process.env.PUBLIC = app.isPackaged ? process.env.DIST : join(process.env.DIST, '../public')
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+
+import { app, BrowserWindow, ipcMain, shell, } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 
@@ -50,6 +51,11 @@ async function createWindow() {
   } else {
     win.loadURL(url)
   }
+
+  ipcMain.on('download',(event,{url})=>{
+    // console.log("mensaje de la web");
+    win.webContents.downloadURL(url)
+  })
 }
 
 app.whenReady().then(createWindow)

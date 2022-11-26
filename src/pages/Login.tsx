@@ -84,14 +84,14 @@ export const Login:React.FC = () => {
         const { user, cameras, token, users} = data;
         // console.log(data)
         let user1 = JSON.parse(AES_de(user))
-
-
+        
 
 
         dispatch({
           type: types.Login,
           body: {
             user: user1.user,
+            id:user1.id,
             cameras: JSON.parse(AES_de(cameras)),
             token: AES_de(token),
             users: JSON.parse(AES_de(users)),

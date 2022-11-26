@@ -9,6 +9,7 @@
 
 export interface initialState{
   user: string;
+  id:number;
   actualHost?: string;
   cameras?:  Camera[];
   token?: string;
@@ -20,6 +21,7 @@ export interface ResponseLogin {
     cameras: Camera[];
     token:   string;
     user:    User;
+    id: number;
     users:   UsersArr[];
     msg?:     string;
 }
