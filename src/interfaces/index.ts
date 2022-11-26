@@ -9,7 +9,7 @@
 
 export interface initialState{
   user: string;
-  id:number;
+  id?:number;
   actualHost?: string;
   cameras?:  Camera[];
   token?: string;

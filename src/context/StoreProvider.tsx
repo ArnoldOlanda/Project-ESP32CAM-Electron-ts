@@ -8,6 +8,7 @@ interface Icontext{
 
 const initialStore= {
     user:   getInitialValue("user", ''),
+    id: getInitialValue("id",''),
     actualHost: getInitialValue("actualHost", ''),
     cameras: getInitialValue("cameras", []),
     token: getInitialValue("token", ''),
@@ -16,7 +17,7 @@ const initialStore= {
 }
 const initialContext = {
     store: initialStore,
-    dispatch: () => {},
+    dispatch: (action:object) => {},
 }
 
 

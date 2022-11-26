@@ -36,8 +36,7 @@ async function createWindow() {
 
   win = new BrowserWindow({
     title: 'SVC-ESP32-UCSM',
-    //fullscreen: true,
-    icon: join(process.env.PUBLIC, 'favicon.svg'),
+    icon: join(process.env.PUBLIC, 'icon.png'),
     webPreferences: {
       preload,
       nodeIntegration: true,
