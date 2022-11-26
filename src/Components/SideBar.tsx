@@ -6,17 +6,15 @@ import { TbDeviceComputerCamera } from "react-icons/tb";
 import styled from 'styled-components'
 import jwtDecode from 'jwt-decode';
 import { ipcRenderer } from 'electron'
-
+import { HiOutlineDocumentDownload } from "react-icons/hi";
 import { isValidIP } from '../helpers';
 import url_base from "../config/variables"
 import { StoreContext } from '../context/StoreProvider';
 import { types } from '../context/StoreReducer';
-
+import ReactTooltip from 'react-tooltip'
 import { Camera, AddCamera, LoadingScreen, User, AddUser } from './';
-
 import '../styles.scss';
 import menu from '../images/menu2.svg'
-import close from '../images/Recurso 1.svg'
 import { Camera as ICamera, UsersArr } from '@/interfaces';
 import { AES_de, AES_en } from '@/service/Encryption';
 
@@ -271,7 +269,7 @@ export const SideBar: React.FC<Props> = (props) => {
     useEffect(() => {
         console.log(JSON.stringify(store,null,4));
     }, [])
-    
+
     const onClickDownloadFile = () => {
         ipcRenderer.send('download',{ url: `${url_base}/logsSistema/${store.id}` })
     }
@@ -282,13 +280,24 @@ export const SideBar: React.FC<Props> = (props) => {
                 {/* Cabecera */}
                 <SidebarHeader>
                     <BoxUser>
-                        <h2 style={{ textAlign: 'center', width: '90%' }}>{props.name}</h2>
+                        <h2 style={{ textAlign: 'center', width: '90%', flex:1 }}>{props.name}</h2>
                         <Close onClick={onClickRefreshStatus}>
                             <IoReload size="1.5em" />
                         </Close>
+                        {
+                        type &&
+                          <Close data-tip data-for="download" onClick={onClickDownloadFile}>
+                            <HiOutlineDocumentDownload size="1.5em" style={{ margin: "auto" }}></HiOutlineDocumentDownload>
+                          </Close>
+                        }
+
                         <Close hidden={isSelected} onClick={() => { setIsSelected(!isSelected) }} >
-                            <IoClose size="2em" style={{ margin: "auto" }}></IoClose>
+                            <IoClose size="1.5em" style={{ margin: "auto" }}></IoClose>
                         </Close>
+
+                        <ReactTooltip id="download">
+                          Descargar Archivo de Registro
+                        </ReactTooltip>
                     </BoxUser>
                 </SidebarHeader>
 
@@ -358,16 +367,7 @@ export const SideBar: React.FC<Props> = (props) => {
                             </SubMenu> : <></>
                         }
                     </Menu>
-                    {
-                        type &&
-                        (
-                            <BoxButtonAdd>
-                                <ButtonAdd onClick={onClickDownloadFile}>
-                                    Descargar Archivo de Registro
-                                </ButtonAdd>
-                            </BoxButtonAdd>
-                        )
-                    }
+
                 </SidebarContent>
 
                 <SidebarFooter>
